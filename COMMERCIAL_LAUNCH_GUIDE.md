@@ -10,7 +10,7 @@ Esta es la forma más rápida y profesional.
 1.  **Sube tu código a GitHub** (Ya lo hemos hecho, tu repositorio está listo).
 2.  Haz clic en el siguiente botón para desplegar automáticamente en Render:
     
-    [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Yoefre/soundprofit-market)
+    [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/juzziw7-sudo/soundprofit-market)
 
 3.  En Render:
     -   Conecta tu cuenta de GitHub.
