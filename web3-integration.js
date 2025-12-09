@@ -7,7 +7,7 @@ class Web3Integration {
         this.account = null;
         this.contract = null;
         this.adminWallet = '0x0bf3a35573dbb8a8062aa8d4536c16c8e4d9f402';
-        this.contractAddress = null; // Set after deployment
+        this.contractAddress = localStorage.getItem('sp_contract_address') || null; // Auto-load from deployment tool
         this.contractABI = [
             {
                 "inputs": [
