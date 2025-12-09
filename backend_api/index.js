@@ -63,6 +63,11 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-http.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Export app for Vercel
+if (process.env.NODE_ENV !== 'production') {
+    http.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;

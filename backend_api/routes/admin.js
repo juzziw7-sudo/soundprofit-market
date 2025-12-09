@@ -235,4 +235,33 @@ router.put('/disputes/:id/resolve', auth, requireAdmin, async (req, res) => {
     }
 });
 
+// FORCE INIT DB (For Vercel Initial Setup)
+// WARNING: Remove or secure this in production after first use!
+router.get('/init-db-force', async (req, res) => {
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const schemaPath = path.join(__dirname, '../schema.sql');
+        const schema = fs.readFileSync(schemaPath, 'utf8');
+
+        console.log('⚡ Force Initializing Database...');
+        await db.query(schema);
+
+        // Create Admin
+        const bcrypt = require('bcrypt');
+        const adminPassword = await bcrypt.hash('admin123', 10);
+        await db.query(`
+            INSERT INTO users (username, email, password_hash, role, is_verified)
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (email) DO NOTHING
+        `, ['admin', 'admin@soundprofit.market', adminPassword, 'admin', true]);
+
+        res.json({ success: true, message: 'Database initialized successfully!' });
+    } catch (error) {
+        console.error('Init DB Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
+
