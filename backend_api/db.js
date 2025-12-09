@@ -8,7 +8,22 @@ const poolConfig = {
     idleTimeoutMillis: 30000,
 };
 
-const pool = new Pool(poolConfig);
+// Lazy initialization of Pool to prevent import-time crashes
+let pool;
+try {
+    if (!process.env.DATABASE_URL) {
+        console.warn("⚠️ DATABASE_URL is not defined. DB dependent routes will fail.");
+    } else {
+        pool = new Pool(poolConfig);
+
+        // Robust connection handler
+        pool.on('error', (err, client) => {
+            console.error('Unexpected error on idle client', err);
+        });
+    }
+} catch (e) {
+    console.error("Failed to initialize DB pool:", e);
+}
 
 // Robust connection handler
 pool.on('error', (err, client) => {
@@ -19,6 +34,10 @@ pool.on('error', (err, client) => {
 // Simple query helper with logging
 module.exports = {
     query: async (text, params) => {
+        if (!pool) {
+            console.error("Attempted DB query with no active pool.");
+            throw new Error("Database not connected. Check DATABASE_URL.");
+        }
         const start = Date.now();
         try {
             const res = await pool.query(text, params);

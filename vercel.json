@@ -1,58 +1,13 @@
 {
     "version": 2,
-    "builds": [
+    "rewrites": [
         {
-            "src": "backend_api/index.js",
-            "use": "@vercel/node"
+            "source": "/api/(.*)",
+            "destination": "/api/index.js"
         },
         {
-            "src": "index.html",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "styles.css",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "app.js",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "web3.min.js",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "web3-integration.js",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "manifest.json",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "icon-*.png",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "sw.js",
-            "use": "@vercel/static"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/backend_api/index.js"
-        },
-        {
-            "src": "/",
-            "dest": "/index.html"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/$1",
-            "headers": {
-                "cache-control": "public, max-age=0, must-revalidate"
-            }
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ]
 }
