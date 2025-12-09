@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundProfit | Protocol Deployment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body class="max-w-3xl mx-auto py-12 px-6">
+
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+            Deploy Protocol Logic</h1>
+        <p class="text-gray-400">Follow these steps to launch your Smart Contract to the Blockchain.</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center font-bold">1</div>
+            <h2 class="text-xl font-bold">Get the Code</h2>
+        </div>
+        <p class="text-gray-300 mb-4">Click copy to grab your Smart Contract source code.</p>
+        <div class="relative">
+            <textarea id="code-area" class="w-full h-32 bg-black/50 text-xs font-mono p-4 rounded-lg text-green-400"
+                readonly>
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SoundProfitProtocol {
+    address public owner;
+    event LicenseSold(address indexed buyer, uint256 indexed songId, address indexed artist, uint256 price);
+    constructor() { owner = msg.sender; }
+    function buyLicense(uint256 songId, address payable artist) external payable {
+        require(msg.value > 0, "Price > 0");
+        uint256 fee = (msg.value * 2) / 100;
+        uint256 artistShare = msg.value - fee;
+        (bool s1, ) = artist.call{value: artistShare}(""); require(s1, "Artist transfer failed");
+        (bool s2, ) = payable(owner).call{value: fee}(""); require(s2, "Owner transfer failed");
+        emit LicenseSold(msg.sender, songId, artist, msg.value);
+    }
+}
+            </textarea>
+            <button onclick="copyCode()"
+                class="absolute top-2 right-2 bg-white/10 hover:bg-white/20 px-3 py-1 rounded text-xs">COPY</button>
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center font-bold">2</div>
+            <h2 class="text-xl font-bold">Deploy on Remix</h2>
+        </div>
+        <p class="text-gray-300 mb-4">
+            1. Go to <a href="https://remix.ethereum.org" target="_blank" class="text-blue-400 underline">Remix
+                IDE</a>.<br>
+            2. Create a new file <code>SoundProfit.sol</code> and Paste the code.<br>
+            3. Compile and go to "Deploy & Run".<br>
+            4. Switch Environment to "Injected Provider - MetaMask".<br>
+            5. Click <strong>Deploy</strong> and confirm in your wallet.
+        </p>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card border-purple-500/50">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold">3</div>
+            <h2 class="text-xl font-bold">Connect App</h2>
+        </div>
+        <p class="text-gray-300 mb-4">Paste the <strong>Contract Address</strong> you got from Remix below to link it to
+            this App.</p>
+
+        <input type="text" id="contract-address" placeholder="0x..."
+            class="w-full bg-black/50 border border-white/20 p-4 rounded-lg text-white mb-4 focus:border-purple-500 outline-none">
+
+        <button onclick="saveConfig()"
+            class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-3 rounded-lg font-bold hover:scale-[1.02] transition">
+            SAVE CONFIGURATION
+        </button>
+        <p id="status-msg" class="text-center text-sm mt-2 text-gray-500"></p>
+    </div>
+
+    <script>
+        function copyCode() {
+            const el = document.getElementById('code-area');
+            el.select();
+            document.execCommand('copy');
+            alert('Code Copied!');
+        }
+
+        function saveConfig() {
+            const addr = document.getElementById('contract-address').value;
+            if (!addr.startsWith('0x') || addr.length !== 42) {
+                alert('Invalid Ethereum Address');
+                return;
+            }
+            localStorage.setItem('sp_contract_address', addr);
+            document.getElementById('status-msg').innerText = 'Saved! You can now close this page.';
+            document.getElementById('status-msg').className = 'text-center text-sm mt-2 text-green-400 font-bold';
+            setTimeout(() => {
+                window.location.href = 'index.html'; // Redirect back to app
+            }, 1000);
+        }
+
+        // Pre-fill if exists
+        const existing = localStorage.getItem('sp_contract_address');
+        if (existing) document.getElementById('contract-address').value = existing;
+    </script>
+</body>
+
+</html>

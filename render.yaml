@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: soundprofit-backend
+    env: node
+    buildCommand: npm install && cd backend_api && npm install
+    startCommand: node backend_api/index.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: soundprofit-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_WALLET_ADDRESS
+        value: 0x0bf3a35573dbb8a8062aa8d4536c16c8e4d9f402
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: soundprofit-db
+    databaseName: soundprofit
+    user: soundprofit_user

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy SoundProfit Market</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f0f16;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: #1e1e2d;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #7c3aed, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .deploy-btn {
+            display: inline-block;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .deploy-btn:hover {
+            transform: translateY(-2px);
+            background: #6d28d9;
+        }
+
+        .steps {
+            text-align: left;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .step {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .check {
+            color: #10b981;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>🚀 Launch Your Platform</h1>
+        <p>Your SoundProfit Market platform is fully configured and ready for the internet. Click the button below to
+            deploy it to the cloud instantly.</p>
+
+        <a href="https://render.com/deploy" target="_blank" class="deploy-btn">
+            Click to Deploy to Render
+        </a>
+
+        <div class="steps">
+            <p style="margin-bottom: 1rem; font-weight: bold; color: white;">Before you click:</p>
+            <div class="step"><span class="check">✓</span> 1. Ensure you have pushed this code to your GitHub.</div>
+            <div class="step"><span class="check">✓</span> 2. Click the button above.</div>
+            <div class="step"><span class="check">✓</span> 3. Connect your GitHub repository.</div>
+            <div class="step"><span class="check">✓</span> 4. Render does the rest!</div>
+            <div class="step" style="margin-top: 1rem; color: #22d3ee;">
+                ℹ️ You will get your shareable link (e.g., https://soundprofit.onrender.com) automatically.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

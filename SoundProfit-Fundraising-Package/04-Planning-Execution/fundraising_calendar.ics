@@ -1,0 +1,84 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SoundProfit//Fundraising Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:SoundProfit Fundraising
+X-WR-TIMEZONE:America/New_York
+X-WR-CALDESC:90-day fundraising campaign for SoundProfit
+
+BEGIN:VEVENT
+DTSTART:20241209T140000Z
+DTEND:20241209T210000Z
+DTSTAMP:20241206T174841Z
+UID:soundprofit-day1@fundraising
+SUMMARY:🚀 DAY 1: Setup & Pitch Deck Creation
+DESCRIPTION:BLOCK 1 (1pm-2pm): Setup\n- Create folders\n- Setup Canva\n- Read PITCH_DECK.md\n\nBLOCK 2 (2pm-5pm): Create Slides\n- Slides 1-10\n- Export to PDF\n\nBLOCK 3 (5pm-6pm): One-Pager\n- Design in Canva\n- Print 10 copies\n\nBLOCK 4 (6pm-7pm): First Practice\n- Record pitch\n- Review video\n\nBLOCK 5 (7pm-8pm): Investor Research\n- LinkedIn audit\n- Identify 5 contacts\n\nBLOCK 6 (8pm-8:30pm): Planning\n- Block next week\n- Prepare for Monday
+LOCATION:Home Office
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART:20241209T130000Z
+DTEND:20241209T170000Z
+RRULE:FREQ=DAILY;COUNT=90
+DTSTAMP:20241206T174841Z
+UID:soundprofit-daily-work@fundraising
+SUMMARY:💼 SoundProfit Fundraising - Daily Work Block
+DESCRIPTION:Morning Routine (9am):\n- Review metrics\n- Check inbox\n- Plan top 3 priorities\n\nOutreach Block (10am-12pm):\n- Research 5 investors\n- Write 5-10 emails\n- Send follow-ups\n\nCalls & Meetings (2pm-4pm):\n- Investor calls\n- Post-call follow-ups\n\nPractice & Improvement (4pm-5pm):\n- Pitch practice\n- Q&A prep\n\nEvening Routine (5pm):\n- Update tracking\n- Review progress\n- Plan tomorrow
+LOCATION:Home Office
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART:20241213T170000Z
+DTEND:20241213T180000Z
+RRULE:FREQ=WEEKLY;COUNT=13
+DTSTAMP:20241206T174841Z
+UID:soundprofit-weekly-review@fundraising
+SUMMARY:📊 Weekly Review & Planning
+DESCRIPTION:Review this week:\n- Total emails sent\n- Total responses\n- Total calls\n- Investors interested\n\nPlan next week:\n- Goals\n- Adjustments\n- New strategies
+LOCATION:Home Office
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART:20250106T050000Z
+DTEND:20250106T060000Z
+DTSTAMP:20241206T174841Z
+UID:soundprofit-milestone-month1@fundraising
+SUMMARY:🎯 MILESTONE: Month 1 Complete
+DESCRIPTION:Target metrics:\n- 50+ emails sent\n- 15+ responses\n- 10+ calls completed\n- 2-3 term sheets in discussion\n\nReview and celebrate progress!
+LOCATION:Home Office
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART:20250206T050000Z
+DTEND:20250206T060000Z
+DTSTAMP:20241206T174841Z
+UID:soundprofit-milestone-month2@fundraising
+SUMMARY:🎯 MILESTONE: Month 2 Complete
+DESCRIPTION:Target metrics:\n- Deal closed: $50K\n- Backend migrated to production\n- Beta users onboarded\n\nCelebrate and plan launch!
+LOCATION:Home Office
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+
+BEGIN:VEVENT
+DTSTART:20250306T050000Z
+DTEND:20250306T060000Z
+DTSTAMP:20241206T174841Z
+UID:soundprofit-milestone-month3@fundraising
+SUMMARY:🎯 MILESTONE: Month 3 Complete - LAUNCH!
+DESCRIPTION:Target metrics:\n- 500+ users\n- 100+ transactions\n- $5K+ revenue\n\nPublic launch complete!
+LOCATION:Home Office
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+
+END:VCALENDAR

@@ -1,0 +1,53 @@
+Investor Name,Category,Email,LinkedIn,Phone,Warm/Cold,Date First Contact,Email Sent,Response Received,Response Date,Call Scheduled,Call Date,Call Notes,Interest Level,Next Step,Next Step Date,Amount Discussed,Status,Notes
+Sahil Lavingia,Angel,sahil@gumroad.com,linkedin.com/in/sahil,N/A,Warm,,,No,,,,,,,,,Researching,Founder of Gumroad - understands creator economy
+Jason Calacanis,Angel,jason@launch.co,linkedin.com/in/calacanis,N/A,Cold,,,No,,,,,,,,,Researching,Apply to LAUNCH accelerator
+Naval Ravikant,Angel,N/A,twitter.com/naval,N/A,Cold,,,No,,,,,,,,,Researching,Crypto enthusiast - reach via Twitter
+Balaji Srinivasan,Angel,N/A,twitter.com/balajis,N/A,Cold,,,No,,,,,,,,,Researching,Ex-CTO Coinbase
+Hustle Fund,Micro VC,apply@hustlefund.vc,linkedin.com/company/hustlefund,N/A,Cold,,,No,,,,,,,,,To Apply,Pre-seed specialist
+Boost VC,Micro VC,apply@boost.vc,linkedin.com/company/boost-vc,N/A,Cold,,,No,,,,,,,,,To Apply,Crypto/blockchain focus
+Chapter One,Micro VC,hello@chapterone.com,linkedin.com/company/chapter-one,N/A,Cold,,,No,,,,,,,,,To Contact,Pre-seed friendly
+Offline Ventures,Micro VC,team@offline.vc,linkedin.com/company/offline-ventures,N/A,Cold,,,No,,,,,,,,,To Contact,Marketplaces focus
+Liquid 2 Ventures,Micro VC,info@liquid2.vc,linkedin.com/company/liquid2ventures,N/A,Cold,,,No,,,,,,,,,To Contact,Crypto-focused
+Y Combinator,Accelerator,apply.ycombinator.com,linkedin.com/company/y-combinator,N/A,Cold,,,No,,,,,,,,,To Apply,Need 100+ users first
+Techstars,Accelerator,apply.techstars.com,linkedin.com/company/techstars,N/A,Cold,,,No,,,,,,,,,To Apply,Music/Media program
+500 Global,Accelerator,500.co/apply,linkedin.com/company/500-global,N/A,Cold,,,No,,,,,,,,,To Apply,Global reach
+Beatport,Strategic,bd@beatport.com,linkedin.com/company/beatport,N/A,Cold,,,No,,,,,,,,,To Contact,Audio platform - partnership potential
+Splice,Strategic,partnerships@splice.com,linkedin.com/company/splice,N/A,Cold,,,No,,,,,,,,,To Contact,Complementary offering
+LANDR,Strategic,business@landr.com,linkedin.com/company/landr,N/A,Cold,,,No,,,,,,,,,To Contact,White-label opportunity
+Adobe,Strategic,N/A,linkedin.com/company/adobe,N/A,Cold,,,No,,,,,,,,,Researching,Audition/Premiere integration
+Spotify,Strategic,N/A,linkedin.com/company/spotify,N/A,Cold,,,No,,,,,,,,,Researching,Commercial audio expansion
+Epic Games,Strategic,N/A,linkedin.com/company/epic-games,N/A,Cold,,,No,,,,,,,,,Researching,Unreal Engine audio needs
+Canva,Strategic,partnerships@canva.com,linkedin.com/company/canva,N/A,Cold,,,No,,,,,,,,,To Contact,Audio for templates
+Republic,Crowdfunding,raise@republic.co,linkedin.com/company/republic,N/A,Cold,,,No,,,,,,,,,Backup Plan,If VC doesn't work
+
+INSTRUCTIONS:
+1. Import this CSV into Google Sheets or Excel
+2. Add your own warm connections (row 21+)
+3. Update "Date First Contact" when you reach out
+4. Mark "Email Sent" as Yes/No
+5. Track response dates and call dates
+6. Use "Interest Level" (High/Medium/Low/None)
+7. Always fill "Next Step" and "Next Step Date"
+8. Update "Status" (Researching/To Contact/Contacted/In Discussion/Term Sheet/Closed/Passed)
+
+CATEGORIES:
+- Angel: Individual investors
+- Micro VC: Small venture funds ($25K-250K checks)
+- Accelerator: Programs with equity + cash
+- Strategic: Companies for partnership/acquisition
+- Crowdfunding: Equity crowdfunding platforms
+
+WARM/COLD:
+- Warm: You have a mutual connection or intro
+- Cold: No prior relationship
+
+STATUS OPTIONS:
+- Researching: Gathering info before outreach
+- To Contact: Ready to reach out
+- To Apply: Need to submit application
+- Contacted: Email sent, awaiting response
+- In Discussion: Active conversations
+- Term Sheet: Negotiating terms
+- Closed: Deal done
+- Passed: They said no
+- Backup Plan: Keep for later if needed

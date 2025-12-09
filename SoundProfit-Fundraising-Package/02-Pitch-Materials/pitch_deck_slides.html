@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundProfit - Pitch Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 72px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #9333ea 0%, #db2777 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 40px;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .problem-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .problem-stat {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fbbf24;
+            margin: 15px 0;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(168, 85, 247, 0.2);
+            border: 2px solid #a855f7;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            font-size: 18px;
+            color: #64748b;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container" id="slideContainer">
+        <div class="slide">
+            <div class="logo">🎵</div>
+            <h1>SOUNDPROFIT</h1>
+            <p style="font-size: 28px; color: #94a3b8;">El Marketplace Descentralizado para Audio Comercial</p>
+        </div>
+
+        <div class="slide">
+            <h2>El Problema</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <div class="problem-stat">30-50%</div>
+                    <p>FEES ABUSIVOS</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <div class="problem-stat">30-60 días</div>
+                    <p>PAGOS LENTOS</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔒</div>
+                    <div class="problem-stat">0%</div>
+                    <p>CONTROL CERO</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Más slides aquí -->
+    </div>
+
+    <div class="slide-number" id="slideNumber">1 / 10</div>
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Anterior</button>
+        <button class="nav-btn" onclick="nextSlide()">Siguiente →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 10;
+
+        function updateSlide() {
+            document.getElementById('slideContainer').style.transform = `translateX(-${currentSlide * 100}vw)`;
+            document.getElementById('slideNumber').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+    </script>
+</body>
+
+</html>

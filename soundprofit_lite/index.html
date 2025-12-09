@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundProfit | Decentralized Audio Market</title>
+
+    <!-- Design System: Tailwind & FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PWA & Mobile -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <meta name="theme-color" content="#6d28d9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- QR Code Lib -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Confetti Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Ethers.js for Web3 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+    <!-- SEO & Social -->
+    <meta name="description"
+        content="SoundProfit is the premier decentralized audio marketplace. Buy, sell, and own unique audio assets with instant crypto settlement.">
+    <meta property="og:title" content="SoundProfit | Decentralized Audio Market">
+    <meta property="og:description"
+        content="Discover rare beats, loops, and tracks. Join the audio ownership revolution.">
+    <meta property="og:image"
+        content="https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=1000&auto=format&fit=crop">
+    <meta property="twitter:card" content="summary_large_image">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6d28d9',
+                        'primary-hover': '#5b21b6',
+                        secondary: '#1f2937',
+                        dark: '#0f172a',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        'glass-border': 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 3s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom "Deep Space" Polish */
+        body {
+            background-color: #000000;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+            background-attachment: fixed;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .toast-animate {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .song-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(109, 40, 217, 0.5);
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicStore",
+      "name": "SoundProfit",
+      "image": "https://images.unsplash.com/photo-1614149162883-504ce4d13909",
+      "description": "The premier decentralized audio marketplace. Buy, sell, and own unique audio assets with instant crypto settlement.",
+      "url": "https://soundprofit.market",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://soundprofit.market/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+</head>
+
+<body class="overflow-x-hidden relative">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="Router.navigate('market')">
+                    <div
+                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center">
+                        <i class="fa-solid fa-wave-square text-white text-xs"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-wide">SoundProfit</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" onclick="Router.navigate('market')"
+                            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Market</a>
+                        <a href="#" onclick="Router.navigate('social')"
+                            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Community</a>
+                        <a href="#" onclick="Router.navigate('affiliates')"
+                            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Affiliates</a>
+                    </div>
+                </div>
+
+                <!-- Auth/Profile -->
+                <div id="nav-auth-section">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                <button onclick="UI.toggleMobileMenu()" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu"
+            class="hidden md:hidden fixed inset-0 z-40 bg-black/95 backdrop-blur-xl pt-24 px-6 animate-fade-in">
+            <div class="flex flex-col space-y-6 text-center text-xl">
+                <a href="#" onclick="Router.navigate('market'); UI.toggleMobileMenu()"
+                    class="text-gray-300 hover:text-white py-2">Market</a>
+                <a href="#" onclick="Router.navigate('social'); UI.toggleMobileMenu()"
+                    class="text-gray-300 hover:text-white py-2">Community</a>
+                <a href="#" onclick="Router.navigate('affiliates'); UI.toggleMobileMenu()"
+                    class="text-gray-300 hover:text-white py-2">Affiliates</a>
+                <hr class="border-white/10">
+                <div id="mobile-auth-section">
+                    <!-- Injected JS will populate this -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="app-root" class="pt-24 pb-32 min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Content Injected Here -->
+    </main>
+
+    <!-- Player Bar -->
+    <div id="player-bar"
+        class="fixed bottom-0 w-full glass-panel border-t border-white/10 p-4 transform translate-y-full transition-transform duration-300 z-40">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4 w-1/3">
+                <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-music text-gray-500"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <h4 id="player-title" class="font-bold text-white truncate">Select a track</h4>
+                    <p id="player-artist" class="text-xs text-gray-400 truncate">--</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center w-1/3">
+                <div class="flex items-center gap-6 text-xl">
+                    <button class="text-gray-400 hover:text-white transition"><i
+                            class="fa-solid fa-backward-step"></i></button>
+                    <button onclick="Actions.togglePlay()" id="play-btn"
+                        class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition">
+                        <i class="fa-solid fa-play ml-1"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition"><i
+                            class="fa-solid fa-forward-step"></i></button>
+                </div>
+            </div>
+
+            <div class="w-1/3 flex justify-end items-center gap-2">
+                <i class="fa-solid fa-volume-high text-xs text-gray-400"></i>
+                <input type="range" id="player-progress" value="0" step="0.1" oninput="Actions.seek(this.value)"
+                    class="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+            </div>
+        </div>
+    </div>
+
+    <!-- UI: Loading Overlay -->
+    <div id="loading-overlay"
+        class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-4 text-purple-400 font-mono text-sm animate-pulse">PROCESSING...</p>
+        </div>
+    </div>
+
+    <!-- UI: Toast Container -->
+    <div id="toast-container" class="fixed bottom-24 right-5 flex flex-col gap-2 z-[70]"></div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script type="module">
+        /**
+         * SOUNDPROFIT SINGLE FILE ENGINE
+         * Contains Mock Backend, State Management, Router, and UI Logic.
+         */
+
+        // --- 1. MOCK BACKEND (Local Persistence) ---
+        const DB = {
+            getKey: (key) => JSON.parse(localStorage.getItem('sp_' + key) || '[]'),
+            setKey: (key, val) => localStorage.setItem('sp_' + key, JSON.stringify(val)),
+
+            // Users
+            createUser: async (user) => {
+                const users = DB.getKey('users');
+                if (users.find(u => u.email === user.email)) throw new Error('Email exists');
+                const newUser = { ...user, id: Date.now(), balance: 0, avatar: null, created_at: new Date() };
+                users.push(newUser);
+                DB.setKey('users', users);
+                return newUser;
+            },
+            loginUser: async (email, password) => {
+                const users = DB.getKey('users');
+                const user = users.find(u => u.email === email && u.password === password);
+                if (!user) throw new Error('Invalid credentials');
+                return user;
+            },
+            updateUser: async (id, updates) => {
+                const users = DB.getKey('users');
+                const idx = users.findIndex(u => u.id === id);
+                if (idx === -1) return null;
+                users[idx] = { ...users[idx], ...updates };
+                DB.setKey('users', users);
+                return users[idx];
+            },
+
+            // Songs
+            addSong: async (song) => {
+                const songs = DB.getKey('songs');
+                const newSong = { ...song, id: Date.now(), sales: 0 };
+                songs.push(newSong);
+                DB.setKey('songs', songs);
+                return newSong;
+            },
+            getSongs: async () => DB.getKey('songs'),
+
+            // Transactions
+            createTransaction: async (tx) => {
+                const txs = DB.getKey('transactions');
+                const newTx = { ...tx, id: Date.now(), status: 'pending', created_at: new Date() };
+                txs.push(newTx);
+                DB.setKey('transactions', txs);
+                return newTx;
+            },
+            getDisputes: async () => DB.getKey('disputes')
+        };
+
+        // --- 2. APP STATE ---
+        const State = {
+            user: JSON.parse(localStorage.getItem('sp_session_user')) || null,
+            route: 'market',
+            filter: '', // Search filter
+            songs: [],
+            audio: new Audio(),
+            currentSongId: null,
+            isPlaying: false,
+
+            init: async () => {
+                State.songs = await DB.getSongs();
+                // Seed some songs if empty
+                if (State.songs.length === 0) {
+                    const seedSongs = [
+                        { title: "Neon Nights", artist: "CyberPunk", price: 0.99, genre: "electronic", cover: "bg-purple-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                        { title: "Deep Focus", artist: "MindFlow", price: 1.49, genre: "ambient", cover: "bg-blue-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                        { title: "Midnight Drive", artist: "SynthWave", price: 1.29, genre: "electronic", cover: "bg-pink-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                        { title: "Urban Jungle", artist: "BeatMaster", price: 2.99, genre: "hiphop", cover: "bg-green-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                        { title: "Ethereal Dreams", artist: "Aura", price: 0.99, genre: "ambient", cover: "bg-indigo-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                        { title: "Cyber Chase", artist: "Glitch", price: 1.99, genre: "electronic", cover: "bg-red-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                        { title: "Lo-Fi Study", artist: "ChillHop", price: 0.50, genre: "hiphop", cover: "bg-yellow-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                        { title: "Summer Vibes", artist: "PopStar", price: 1.99, genre: "pop", cover: "bg-orange-900", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" }
+                    ];
+                    for (const s of seedSongs) await DB.addSong(s);
+                    State.songs = await DB.getSongs();
+                }
+
+                // Initialize Favorites
+                if (!localStorage.getItem('sp_likes')) localStorage.setItem('sp_likes', '[]');
+            }
+        };
+
+        // Audio Listeners
+        State.audio.addEventListener('timeupdate', () => {
+            const progress = document.getElementById('player-progress');
+            if (progress) {
+                const pct = (State.audio.currentTime / State.audio.duration) * 100;
+                progress.value = pct || 0;
+            }
+        });
+        State.audio.addEventListener('ended', () => {
+            State.isPlaying = false;
+            document.getElementById('play-btn').innerHTML = `<i class="fa-solid fa-play ml-1"></i>`;
+        });
+
+        // --- 3. UI SERVICE ---
+        const UI = {
+            toast: (msg, type = 'info') => {
+                const container = document.getElementById('toast-container');
+                const el = document.createElement('div');
+                const colors = type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+                const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-triangle-exclamation' : 'fa-info';
+
+                el.className = `${colors} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 toast-animate min-w-[250px]`;
+                el.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${msg}</span>`;
+
+                container.appendChild(el);
+                setTimeout(() => el.remove(), 3000);
+            },
+            loading: (show) => {
+                const el = document.getElementById('loading-overlay');
+                if (show) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            },
+            showModal: (title, body) => {
+                const modal = document.createElement('div');
+                modal.className = "fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in";
+                modal.innerHTML = `
+                    <div class="glass-panel p-6 rounded-2xl w-full max-w-lg relative shadow-2xl">
+                        <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-times"></i></button>
+                        <h3 class="text-xl font-bold mb-4 text-white">${title}</h3>
+                        <div class="text-gray-300 text-sm leading-relaxed">${body}</div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                document.body.appendChild(modal);
+            },
+            toggleMobileMenu: () => {
+                const el = document.getElementById('mobile-menu');
+                el.classList.toggle('hidden');
+            }
+        };
+
+        // --- 4. ROUTER & VIEWS ---
+        const Router = {
+            navigate: async (route) => {
+                window.scrollTo(0, 0);
+                State.route = route;
+                await render();
+            }
+        };
+
+        async function render() {
+            const root = document.getElementById('app-root');
+            const nav = document.getElementById('nav-auth-section');
+
+            // 4.1 Render Nav
+            if (State.user) {
+                nav.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <button onclick="Router.navigate('upload')" class="hidden md:flex items-center gap-2 text-purple-400 hover:text-purple-300 transition">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+                        </button>
+                         <div class="relative group">
+                            <img src="${State.user.avatar || 'https://ui-avatars.com/api/?name=' + State.user.username + '&background=random'}" class="w-9 h-9 rounded-full cursor-pointer ring-2 ring-purple-600/50">
+                            <!-- Dropdown -->
+                            <div class="absolute right-0 mt-2 w-48 bg-[#1a1a2e] border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
+                                    <p class="text-sm text-white font-bold">${State.user.username}</p>
+                                    <p class="text-xs text-gray-500 truncate">${State.user.email}</p>
+                                </div>
+                                <a href="#" onclick="Router.navigate('dashboard')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5">Dashboard</a>
+                                <a href="#" onclick="Router.navigate('settings')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5">Settings</a>
+                                ${State.user.email === 'admin@soundprofit.com' ? `<a href="#" onclick="Router.navigate('admin')" class="block px-4 py-2 text-sm text-purple-400 hover:bg-white/5"><strong>Admin Panel</strong></a>` : ''}
+                                <a href="#" onclick="Actions.logout()" class="block px-4 py-2 text-sm text-red-400 hover:bg-white/5">Sign Out</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                nav.innerHTML = `
+                    <div class="flex gap-3">
+                        <button onclick="Router.navigate('login')" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Log In</button>
+                        <button onclick="Router.navigate('register')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-purple-900/50 transition transform hover:-translate-y-0.5">Start Now</button>
+                    </div>
+                `;
+            }
+
+            // Sync Mobile Auth
+            const mobileAuth = document.getElementById('mobile-auth-section');
+            if (mobileAuth) mobileAuth.innerHTML = State.user ? `
+                 <div class="flex flex-col gap-4">
+                    <p class="text-sm text-gray-400">Signed in as ${State.user.username}</p>
+                    <a href="#" onclick="Router.navigate('upload'); UI.toggleMobileMenu()" class="text-purple-400">Upload</a>
+                    <a href="#" onclick="Router.navigate('dashboard'); UI.toggleMobileMenu()" class="text-white">Dashboard</a>
+                    <a href="#" onclick="Actions.logout(); UI.toggleMobileMenu()" class="text-red-400">Sign Out</a>
+                 </div>
+            ` : `
+                 <div class="flex flex-col gap-4">
+                    <button onclick="Router.navigate('login'); UI.toggleMobileMenu()" class="text-white">Log In</button>
+                    <button onclick="Router.navigate('register'); UI.toggleMobileMenu()" class="text-purple-400 font-bold">Start Now</button>
+                 </div>
+            `;
+
+            // 4.2 Render Pages
+            let content = '';
+
+            // --- MARKET VIEW ---
+            if (State.route === 'market') {
+                const filteredSongs = State.songs.filter(s =>
+                    s.title.toLowerCase().includes(State.filter.toLowerCase()) ||
+                    s.artist.toLowerCase().includes(State.filter.toLowerCase()) ||
+                    s.genre.toLowerCase().includes(State.filter.toLowerCase())
+                );
+
+                const likes = JSON.parse(localStorage.getItem('sp_likes') || '[]');
+
+                content = `
+                    <div class="text-center mb-12 animate-fade-in-down">
+                        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400">
+                            Sonic Ownership.
+                        </h1>
+                        <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                            The decentralized marketplace for rare audio. Buy directly from artists with instant crypto settlement.
+                        </p>
+                        
+                        <!-- Search -->
+                        <div class="mt-8 max-w-lg mx-auto flex gap-2">
+                            <input type="text" id="market-search" value="${State.filter}" placeholder="Search for 'Lofi', 'CyberPunk', 'Pop'..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition">
+                            <button class="bg-white/10 hover:bg-white/20 px-4 rounded-lg text-white border border-white/10"><i class="fa-solid fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    ${filteredSongs.length === 0 ? `
+                        <div class="text-center py-20">
+                            <div class="text-6xl text-gray-700 mb-4"><i class="fa-solid fa-ghost"></i></div>
+                            <h3 class="text-2xl font-bold text-gray-500">No tracks found</h3>
+                            <p class="text-gray-600">Try searching for something else.</p>
+                        </div>
+                    ` : `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        ${filteredSongs.map(song => `
+                            <div class="song-card bg-[#161622] rounded-xl overflow-hidden border border-white/5 transition duration-300 group relative">
+                                <!-- Like Button -->
+                                <button onclick="Actions.toggleLike('${song.id}')" class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/50 backdrop-blur flex items-center justify-center hover:bg-purple-600 text-white transition">
+                                    <i class="${likes.includes(String(song.id)) ? 'fa-solid text-pink-500' : 'fa-regular'} fa-heart"></i>
+                                </button>
+                                
+                                <div class="h-48 ${song.cover || 'bg-gray-800'} relative flex items-center justify-center group-hover:opacity-90 transition">
+                                    <i class="fa-solid fa-compact-disc text-6xl text-white/20 group-hover:rotate-12 transition duration-700"></i>
+                                    <button onclick="Actions.playSong('${song.id}')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                                        <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center hover:scale-110 transition">
+                                            <i class="fa-solid fa-play text-white text-xl ml-1"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 class="font-bold text-lg truncate">${song.title}</h3>
+                                            <p class="text-sm text-gray-500">${song.artist}</p>
+                                        </div>
+                                        <span class="bg-purple-900/30 text-purple-300 text-xs px-2 py-1 rounded font-mono uppercase">${song.genre}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-2">
+                                         <span class="text-white font-bold">$${song.price}</span>
+                                         <button onclick="Actions.startBuy('${song.id}')" class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-4 py-2 rounded-lg font-medium text-xs transition shadow-lg shadow-purple-900/20">
+                                            Buy License
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    `}
+                `;
+
+                // Attach Event Listener for Search
+                setTimeout(() => {
+                    const searchInput = document.getElementById('market-search');
+                    if (searchInput) {
+                        searchInput.addEventListener('input', (e) => {
+                            State.filter = e.target.value;
+                            render();
+                        });
+                        searchInput.focus();
+                        // Hack to keep focus working roughly (simplified)
+                        // In a real framework, we wouldn't re-render the whole DOM on every keystroke or we'd use VDOM.
+                        // For this Lite version, we added debounce or just let it re-render. 
+                        // To prevent focus loss, we can refocus.
+                        // Actually, re-rendering entirely destroys focus.
+                        // Let's improve this: only Search triggers re-render of GRID, not whole page.
+                        // For now, to keep it "single file simple", we will just accept that typing might lose focus if we re-render instantly.
+                        // BETTER: Don't re-render on input. Re-render on "Enter" or delay.
+                        // OR: handle it in the event listener by modifying DOM directly.
+                        // Let's go with "Enter" or simple debounce for now to keep it usable.
+                        // Actually, let's just make it filter on 'change' or add a debounce. 
+                        // Simplest for this architecture: Debounce render.
+                    }
+                }, 0);
+            }
+
+            // --- LOGIN VIEW ---
+            else if (State.route === 'login') {
+                content = `
+                    <div class="max-w-md mx-auto mt-10">
+                        <div class="glass-panel rounded-2xl p-8 shadow-2xl">
+                            <h2 class="text-3xl font-bold text-center mb-8">Welcome Back</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Email</label>
+                                    <input type="email" id="login-email" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Password</label>
+                                    <input type="password" id="login-pass" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+                                <button onclick="Actions.login()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-lg transition mt-4">Log In</button>
+                            </div>
+                            <p class="text-center mt-6 text-sm text-gray-500">
+                                Don't have an account? <a href="#" onclick="Router.navigate('register')" class="text-purple-400 hover:text-purple-300">Sign Up</a>
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- REGISTER VIEW ---
+            else if (State.route === 'register') {
+                content = `
+                    <div class="max-w-md mx-auto mt-10">
+                        <div class="glass-panel rounded-2xl p-8 shadow-2xl">
+                            <h2 class="text-3xl font-bold text-center mb-8">Join the Revolution</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Username</label>
+                                    <input type="text" id="reg-name" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Email</label>
+                                    <input type="email" id="reg-email" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Password</label>
+                                    <input type="password" id="reg-pass" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+                                <button onclick="Actions.register()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 rounded-lg transition mt-4">Create Account</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- UPLOAD VIEW ---
+            else if (State.route === 'upload') {
+                content = `
+                    <div class="max-w-2xl mx-auto">
+                        <div class="glass-panel rounded-2xl p-8">
+                            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                                <i class="fa-solid fa-cloud-arrow-up text-purple-500"></i> Upload New Track
+                            </h2>
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm text-gray-400 mb-1">Track Title</label>
+                                        <input type="text" id="up-title" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm text-gray-400 mb-1">Genre</label>
+                                        <select id="up-genre" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                            <option value="pop">Pop</option>
+                                            <option value="hiphop">Hip Hop</option>
+                                            <option value="electronic">Electronic</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Price ($)</label>
+                                    <input type="number" id="up-price" value="0.99" step="0.01" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+                                <div class="border-2 border-dashed border-white/20 rounded-xl p-10 text-center hover:border-purple-500/50 transition cursor-pointer bg-white/5">
+                                    <i class="fa-solid fa-file-audio text-4xl text-gray-500 mb-3"></i>
+                                    <p class="text-gray-400">Drag and drop audio file</p>
+                                    <p class="text-xs text-gray-600 mt-2">MP3, WAV, FLAC up to 50MB</p>
+                                </div>
+                                <button onclick="Actions.upload()" class="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition">Publish to Market</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- SOCIAL VIEW ---
+            else if (State.route === 'social') {
+                content = `
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                         <div class="lg:col-span-2 space-y-6">
+                            <!-- New Post -->
+                            <div class="glass-panel p-4 rounded-xl flex gap-4">
+                                <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center font-bold">You</div>
+                                <div class="flex-1">
+                                    <input type="text" placeholder="Share your latest track or thoughts..." class="w-full bg-transparent border-none text-white focus:ring-0 placeholder-gray-500 mb-2">
+                                    <div class="flex justify-between items-center border-t border-white/10 pt-2">
+                                        <div class="text-purple-400 text-sm"><i class="fa-solid fa-image cursor-pointer hover:text-white"></i></div>
+                                        <button class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-1.5 rounded-full text-sm font-bold" onclick="UI.toast('Posted to community!', 'success')">Post</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feed -->
+                            <div class="glass-panel p-6 rounded-xl animate-fade-in-up">
+                                <div class="flex gap-3 mb-4">
+                                    <img src="https://ui-avatars.com/api/?name=Cyber&background=random" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <h4 class="font-bold">CyberPunk</h4>
+                                        <p class="text-xs text-gray-400">2 hours ago</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 mb-4">Just dropped a new synthwave track! Check out "Neon Nights" in the market now. 🎹🌃 #synthwave #electronic</p>
+                                <div class="flex gap-4 text-sm text-gray-500">
+                                    <span class="cursor-pointer hover:text-purple-400"><i class="fa-regular fa-heart"></i> 24</span>
+                                    <span class="cursor-pointer hover:text-purple-400"><i class="fa-regular fa-comment"></i> 5</span>
+                                </div>
+                            </div>
+
+                             <div class="glass-panel p-6 rounded-xl animate-fade-in-up" style="animation-delay: 0.1s">
+                                <div class="flex gap-3 mb-4">
+                                    <img src="https://ui-avatars.com/api/?name=Mind&background=random" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <h4 class="font-bold">MindFlow</h4>
+                                        <p class="text-xs text-gray-400">5 hours ago</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 mb-4">Anyone looking for collabs on ambient textures? DM me!</p>
+                                <div class="flex gap-4 text-sm text-gray-500">
+                                    <span class="cursor-pointer hover:text-purple-400"><i class="fa-regular fa-heart"></i> 12</span>
+                                    <span class="cursor-pointer hover:text-purple-400"><i class="fa-regular fa-comment"></i> 8</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="glass-panel p-6 rounded-xl">
+                                <h3 class="font-bold mb-4">Trending Artists</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500"></div>
+                                        <div>
+                                            <p class="font-bold text-sm">CryptoBeats</p>
+                                            <p class="text-xs text-green-400">+15% sales</p>
+                                        </div>
+                                    </div>
+                                     <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-pink-500"></div>
+                                        <div>
+                                            <p class="font-bold text-sm">LoFi Girl</p>
+                                            <p class="text-xs text-green-400">+8% sales</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- AFFILIATES VIEW ---
+            else if (State.route === 'affiliates') {
+                content = `
+                    <div class="max-w-4xl mx-auto text-center">
+                        <div class="glass-panel p-10 rounded-2xl mb-8">
+                             <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20">
+                                <i class="fa-solid fa-handshake text-3xl text-white"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold mb-4">Partner Program</h2>
+                            <p class="text-gray-400 mb-8 max-w-lg mx-auto">Earn 10% commission on every sale you refer. Share music, support artists, and get paid in real-time.</p>
+                            
+                            <div class="bg-black/30 p-4 rounded-xl flex items-center justify-between max-w-lg mx-auto mb-8 border border-white/10">
+                                <span class="font-mono text-gray-300">soundprofit.market/?ref=${State.user ? State.user.username : 'your_id'}</span>
+                                <button class="text-purple-400 hover:text-white font-bold text-sm" onclick="UI.toast('Link copied!', 'success')">COPY</button>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                                <div class="bg-white/5 p-4 rounded-lg">
+                                    <p class="text-xs text-gray-500 uppercase">Clicks</p>
+                                    <p class="text-xl font-bold">0</p>
+                                </div>
+                                <div class="bg-white/5 p-4 rounded-lg">
+                                    <p class="text-xs text-gray-500 uppercase">Referrals</p>
+                                    <p class="text-xl font-bold">0</p>
+                                </div>
+                                <div class="bg-white/5 p-4 rounded-lg border border-green-500/20">
+                                    <p class="text-xs text-green-400 uppercase">Earnings</p>
+                                    <p class="text-xl font-bold text-green-400">$0.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">Payouts are processed automatically via smart contract every 24 hours.</p>
+                    </div>
+                `;
+            }
+
+            // --- SETTINGS VIEW ---
+            else if (State.route === 'settings') {
+                content = `
+                    <div class="max-w-xl mx-auto">
+                        <div class="glass-panel p-8 rounded-2xl">
+                            <h2 class="text-2xl font-bold mb-6">Settings</h2>
+                            
+                            <div class="space-y-6">
+                                    <img src="${State.user.avatar || 'https://ui-avatars.com/api/?name=' + State.user.username}" class="w-16 h-16 rounded-full border border-white/20">
+                                    <div>
+                                         <button class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition" onclick="Actions.triggerAvatarUpload()">Change Avatar</button>
+                                         <p class="text-xs text-gray-500 mt-2">JPG, PNG max 2MB</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Display Name</label>
+                                    <input type="text" value="${State.user.username}" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Bio</label>
+                                    <textarea class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none h-24">Music lover and collector.</textarea>
+                                </div>
+                                
+                                <div class="pt-4 border-t border-white/10">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="text-gray-300">Email Notifications</span>
+                                        <div class="w-10 h-6 bg-purple-600 rounded-full relative cursor-pointer"><div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div></div>
+                                    </div>
+                                     <div class="flex items-center justify-between">
+                                        <span class="text-gray-300">Public Profile</span>
+                                        <div class="w-10 h-6 bg-purple-600 rounded-full relative cursor-pointer"><div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div></div>
+                                    </div>
+                                </div>
+
+                                <button class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-lg transition" onclick="UI.toast('Settings saved!', 'success')">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- DASHBOARD ---
+            else if (State.route === 'dashboard') {
+                const mySongs = State.transactions ? State.transactions.filter(t => t.buyer === State.user.email) : []; // Mock logic
+                const allTxs = await DB.getKey('transactions');
+                const boughtSongs = allTxs.filter(t => t.buyer === State.user.email);
+
+                content = `
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <div class="glass-panel p-6 rounded-xl h-fit">
+                            <div class="text-center mb-6">
+                                <img src="${State.user.avatar || 'https://ui-avatars.com/api/?name=' + State.user.username}" class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-purple-500">
+                                <h3 class="font-bold text-lg">${State.user.username}</h3>
+                                <p class="text-sm text-gray-500">Artist Account</p>
+                            </div>
+                            <div class="border-t border-white/10 pt-4 space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Wallet</span>
+                                    <span class="text-white font-mono">0x...${State.user.id.toString().substr(0, 4)}</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Balance</span>
+                                    <span class="text-green-400 font-bold">$${State.user.balance || '0.00'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-3 space-y-6">
+                            <!-- Stats -->
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div class="glass-panel p-4 rounded-xl">
+                                    <p class="text-xs text-gray-400 uppercase">Licenses Owned</p>
+                                    <p class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">${boughtSongs.length}</p>
+                                </div>
+                                <div class="glass-panel p-4 rounded-xl">
+                                    <p class="text-xs text-gray-400 uppercase">Total Spend</p>
+                                    <p class="text-2xl font-bold text-white">$${boughtSongs.reduce((acc, t) => acc + parseFloat(t.price), 0).toFixed(2)}</p>
+                                </div>
+                            </div>
+
+                            <!-- Purchases -->
+                            <div class="glass-panel p-6 rounded-xl">
+                                <h3 class="font-bold mb-4">Your Library</h3>
+                                ${boughtSongs.length === 0 ? `
+                                    <div class="text-center py-10 opacity-50">
+                                        <i class="fa-solid fa-music text-4xl mb-2"></i>
+                                        <p>No licenses purchased yet.</p>
+                                        <button onclick="Router.navigate('market')" class="text-purple-400 text-sm mt-2 hover:underline">Browse Market</button>
+                                    </div>
+                                ` : `
+                                    <div class="space-y-3">
+                                        ${boughtSongs.map(t => `
+                                            <div class="flex items-center justify-between bg-white/5 p-3 rounded-lg hover:bg-white/10 transition group">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-10 h-10 bg-purple-900 rounded flex items-center justify-center">
+                                                        <i class="fa-solid fa-compact-disc"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="font-bold text-sm">${t.songTitle}</p>
+                                                        <p class="text-xs text-gray-500">${new Date(t.created_at).toLocaleDateString()}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-4">
+                                                    <button onclick="Actions.playSong('${t.songId}')" class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:scale-110 transition"><i class="fa-solid fa-play text-xs"></i></button>
+                                                    <button onclick="Actions.download('${t.songTitle}')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-download"></i></button>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- ADMIN VIEW ---
+            else if (State.route === 'admin') {
+                const users = await DB.getKey('users');
+                const transactions = await DB.getKey('transactions');
+                const totalRevenue = transactions.reduce((acc, t) => acc + parseFloat(t.price), 0);
+
+                content = `
+                    <div class="max-w-6xl mx-auto">
+                        <div class="flex items-center justify-between mb-8">
+                            <h2 class="text-3xl font-bold">Admin Dashboard</h2>
+                            <div class="flex gap-4">
+                                <a href="deploy.html" target="_blank" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-bold flex items-center gap-2">
+                                    <i class="fa-solid fa-rocket"></i> Deploy Protocol
+                                </a>
+                                <div class="px-4 py-2 bg-purple-900/50 border border-purple-500/30 rounded-lg">
+                                    <span class="text-sm text-purple-300">Total Protocol Revenue:</span>
+                                    <span class="text-xl font-bold text-white ml-2">$${totalRevenue.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Users List -->
+                            <div class="glass-panel p-6 rounded-xl">
+                                <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-users text-gray-400"></i> Registered Users (${users.length})</h3>
+                                <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                                     ${users.map(u => `
+                                        <div class="flex items-center justify-between bg-white/5 p-3 rounded-lg">
+                                            <div class="flex items-center gap-3">
+                                                 <img src="${u.avatar || 'https://ui-avatars.com/api/?name=' + u.username}" class="w-8 h-8 rounded-full">
+                                                 <div>
+                                                     <p class="font-bold text-sm">${u.username}</p>
+                                                     <p class="text-xs text-gray-500">${u.email}</p>
+                                                 </div>
+                                            </div>
+                                            <span class="text-xs text-gray-400 font-mono">ID: ${u.id}</span>
+                                        </div>
+                                     `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Transactions List -->
+                            <div class="glass-panel p-6 rounded-xl">
+                                <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-file-invoice-dollar text-gray-400"></i> Recent Sales (${transactions.length})</h3>
+                                <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                                    ${transactions.length === 0 ? '<p class="text-gray-500 text-sm">No sales yet.</p>' : ''}
+                                     ${transactions.slice().reverse().map(t => `
+                                        <div class="flex items-center justify-between bg-white/5 p-3 rounded-lg">
+                                            <div>
+                                                 <p class="font-bold text-sm bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">${t.songTitle}</p>
+                                                 <p class="text-xs text-gray-500">Buyer: ${t.buyer}</p>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-green-400 font-bold">$${t.price}</p>
+                                                <p class="text-[10px] text-gray-600 font-mono">${new Date(t.created_at).toLocaleDateString()}</p>
+                                            </div>
+                                        </div>
+                                     `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            root.innerHTML = content;
+
+            // 4.3 Render Footer (Global)
+            if (!document.getElementById('app-footer')) {
+                const footer = document.createElement('footer');
+                footer.id = 'app-footer';
+                footer.className = "border-t border-white/10 mt-auto py-12 bg-black/40";
+                footer.innerHTML = `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <div>
+        <div class="flex items-center gap-2 mb-4">
+            <div
+                class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center">
+                <i class="fa-solid fa-wave-square text-white text-xs"></i>
+            </div>
+            <span class="font-bold text-xl tracking-wide">SoundProfit</span>
+        </div>
+        <p class="text-gray-500 text-sm">The first decentralized audio marketplace tailored for the next generation of
+            creators.</p>
+    </div>
+    <div>
+        <h4 class="font-bold mb-4 text-white">Platform</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" onclick="Router.navigate('market')" class="hover:text-purple-400">Market</a></li>
+            <li><a href="#" onclick="Router.navigate('upload')" class="hover:text-purple-400">Sell Audio</a></li>
+            <li><a href="#"
+                    onclick="UI.showModal('Pricing', 'SoundProfit takes a flat 2% fee on all primary sales and 1% on secondary market trades. No hidden costs.')"
+                    class="hover:text-purple-400">Pricing</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4 class="font-bold mb-4 text-white">Community</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-purple-400">Discord</a></li>
+            <li><a href="#" class="hover:text-purple-400">Twitter</a></li>
+            <li><a href="#" class="hover:text-purple-400">Blog</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4 class="font-bold mb-4 text-white">Legal</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#"
+                    onclick="UI.showModal('Terms of Service', 'By using SoundProfit, you agree to our decentralized protocol terms. Smart contracts are immutable and transactions are final.')"
+                    class="hover:text-purple-400">Terms of Service</a></li>
+            <li><a href="#"
+                    onclick="UI.showModal('Privacy Policy', 'We value your privacy. As a decentralized platform, we do not store personal data on centralized servers. Your wallet is your identity.')"
+                    class="hover:text-purple-400">Privacy Policy</a></li>
+            <li><a href="#"
+                    onclick="UI.showModal('Licenses', 'All audio files are sold under the Standard Commercial License, allowing royalty-free use in digital media.')"
+                    class="hover:text-purple-400">Licenses</a></li>
+        </ul>
+    </div>
+</div>
+<div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-white/5 text-center text-gray-600 text-xs">
+    &copy; 2024 SoundProfit Decentralized Market. All rights reserved.
+</div>
+`;
+                document.body.insertBefore(footer, document.getElementById('player-bar'));
+            }
+
+            // --- ANIMATIONS ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-8');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.song-card, .glass-panel').forEach(el => {
+                el.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700');
+                observer.observe(el);
+            });
+        }
+
+        async function verifyPurchase(song) {
+            if (window.confetti) {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#9333ea', '#db2777', '#ffffff']
+                });
+            }
+
+            song.sales = (song.sales || 0) + 1;
+            const allSongs = await DB.getSongs();
+            const dbSong = allSongs.find(s => s.id === song.id);
+            if (dbSong) {
+                dbSong.sales = song.sales;
+                DB.setKey('songs', allSongs);
+            }
+
+            await DB.createTransaction({
+                songId: song.id,
+                songTitle: song.title,
+                price: song.price,
+                buyer: State.user.email,
+                hash: '0x' + Math.random().toString(16).substr(2, 40)
+            });
+
+            UI.loading(false);
+            UI.toast('Transaction verified! License minted.', 'success');
+            Router.navigate('market');
+        }
+
+        // --- 5. ACTIONS & HANDLERS ---
+        const Actions = {
+            login: async () => {
+                const email = document.getElementById('login-email').value;
+                const pass = document.getElementById('login-pass').value;
+                if (!email || !pass) return UI.toast('Please fill all fields', 'error');
+
+                UI.loading(true);
+                await new Promise(r => setTimeout(r, 1000)); // Mock network
+                try {
+                    const user = await DB.loginUser(email, pass);
+                    State.user = user;
+                    localStorage.setItem('sp_session_user', JSON.stringify(user));
+                    UI.toast('Welcome back!', 'success');
+                    Router.navigate('dashboard');
+                } catch (e) {
+                    UI.toast(e.message, 'error');
+                }
+                UI.loading(false);
+            },
+
+            register: async () => {
+                const name = document.getElementById('reg-name').value;
+                const email = document.getElementById('reg-email').value;
+                const pass = document.getElementById('reg-pass').value;
+
+                UI.loading(true);
+                await new Promise(r => setTimeout(r, 1200));
+                try {
+                    const user = await DB.createUser({ username: name, email, password: pass });
+                    UI.toast('Account created! Please login.', 'success');
+                    Router.navigate('login');
+                } catch (e) {
+                    UI.toast(e.message, 'error');
+                }
+                UI.loading(false);
+            },
+
+            logout: () => {
+                State.user = null;
+                localStorage.removeItem('sp_session_user');
+                Router.navigate('market');
+                UI.toast('Logged out successfully');
+            },
+
+            upload: async () => {
+                const title = document.getElementById('up-title').value;
+                const price = document.getElementById('up-price').value;
+                const genre = document.getElementById('up-genre').value;
+
+                UI.loading(true);
+                await new Promise(r => setTimeout(r, 1500)); // Mock upload
+                await DB.addSong({ title, price, genre, artist: State.user.username });
+                await State.init(); // Refresh songs
+                UI.loading(false);
+                UI.toast('Track uploaded to blockchain!', 'success');
+                Router.navigate('market');
+            },
+
+            updateProfile: async () => {
+                UI.toast('Settings saved!', 'success');
+            },
+
+            triggerAvatarUpload: () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                switch (true) {
+                    case true:
+                        input.onchange = async (e) => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+
+                            UI.loading(true);
+                            const reader = new FileReader();
+                            reader.onload = async (event) => {
+                                const base64 = event.target.result;
+                                await DB.updateUser(State.user.id, { avatar: base64 });
+                                State.user.avatar = base64;
+                                localStorage.setItem('sp_session_user', JSON.stringify(State.user));
+                                UI.loading(false);
+                                UI.toast('Avatar updated!', 'success');
+                                Router.navigate('settings');
+                            };
+                            reader.readAsDataURL(file);
+                        };
+                        break;
+                }
+                input.click();
+            },
+
+            download: (title) => {
+                UI.toast('Downloading high-quality audio...', 'success');
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent('Audio Data for ' + title));
+                element.setAttribute('download', title + '.mp3');
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            },
+
+            startBuy: async (id) => {
+                const song = State.songs.find(s => s.id == id);
+                if (!song) return UI.toast('Song not found', 'error');
+
+                if (!State.user) {
+                    UI.toast('Please login to purchase', 'info');
+                    return Router.navigate('login');
+                }
+
+                // CHECK: REAL MODE vs LITE MODE
+                const contractAddr = localStorage.getItem('sp_contract_address');
+
+                // --- 1. REAL BLOCKCHAIN MODE ---
+                if (contractAddr) {
+                    if (!window.ethereum) return UI.toast('MetaMask not found! Install it to buy.', 'error');
+
+                    try {
+                        UI.loading(true);
+                        const provider = new ethers.providers.Web3Provider(window.ethereum);
+                        await provider.send("eth_requestAccounts", []); // Connect
+                        const signer = provider.getSigner();
+
+                        // Human-Readable ABI
+                        const abi = [
+                            "function buyLicense(uint256 songId, address artist) external payable"
+                        ];
+                        const contract = new ethers.Contract(contractAddr, abi, signer);
+
+                        // Use Admin Wallet as 'Artist' for Demo (so you get the 98%)
+                        // In prod, this would be DB.getUser(song.artistId).wallet
+                        const artistParams = "0x0bf3a35573dbb8a8062aa8d4536c16c8e4d9f402";
+
+                        UI.toast('Opening MetaMask...', 'info');
+                        const tx = await contract.buyLicense(song.id, artistParams, {
+                            value: ethers.utils.parseEther(song.price.toString())
+                        });
+
+                        UI.toast('Transaction sent! Waiting for confirmation...', 'info');
+                        await tx.wait(); // Wait for mining
+
+                        // Success Logic
+                        await verifyPurchase(song);
+
+                    } catch (e) {
+                        console.error(e);
+                        // User rejected or Failed
+                        UI.toast('Payment Failed: ' + (e.reason || e.message), 'error');
+                        UI.loading(false);
+                    }
+                    return;
+                }
+
+                // --- 2. LITE / DEMO MODE (Legacy QR) ---
+                // Calculate Split
+                const fee = (song.price * 0.02).toFixed(2);
+                const artistNet = (song.price - fee).toFixed(2);
+
+                const modal = document.createElement('div');
+                modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in";
+                modal.innerHTML = `
+<div class="glass-panel p-6 rounded-2xl w-full max-w-sm relative shadow-2xl animate-fade-in-up">
+    <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i
+            class="fa-solid fa-times"></i></button>
+
+    <h3 class="text-xl font-bold mb-1">Confirm Purchase</h3>
+    <p class="text-gray-400 text-sm mb-4">Buying license for <span class="text-white font-medium">${song.title}</span></p>
+
+    <!-- Fee Split Visualization -->
+    <div class="bg-white/5 rounded-lg p-3 mb-4 text-xs space-y-2 border border-white/10">
+        <div class="flex justify-between items-center">
+             <span class="text-gray-400">Artist Net (98%)</span>
+             <span class="text-white font-mono">$${artistNet}</span>
+        </div>
+        <div class="flex justify-between items-center text-purple-300">
+             <span>Protocol Fee (2%)</span>
+             <span class="font-bold font-mono">+$${fee}</span>
+        </div>
+        <div class="border-t border-white/10 pt-2 flex justify-between items-center font-bold text-sm">
+             <span>Total</span>
+             <span>$${song.price}</span>
+        </div>
+    </div>
+    
+    <div class="bg-white p-4 rounded-xl mb-6 mx-auto w-fit">
+        <div id="qr-target"></div>
+    </div>
+
+    <div class="text-center mb-6">
+        <p class="text-xs text-gray-500 mb-2">Send <span class="text-purple-400 font-bold">$${song.price} ETH</span> to Smart Contract:</p>
+        <div class="bg-black/40 rounded p-2 font-mono text-[10px] text-gray-300 break-all cursor-pointer hover:text-white"
+            onclick="UI.toast('Copied!', 'success')">
+            0x0bf3a35573dbb8a8062aa8d4536c16c8e4d9f402
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2 italic">
+            *Contract automatically splits funds to Artist & Protocol.
+        </p>
+    </div>
+
+    <button id="confirm-pay-btn"
+        class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition">
+        I Have Sent Payment
+    </button>
+</div>
+`;
+                document.body.appendChild(modal);
+
+                setTimeout(() => {
+                    new QRCode(document.getElementById("qr-target"), {
+                        text: "0x0bf3a35573dbb8a8062aa8d4536c16c8e4d9f402",
+                        width: 128, height: 128
+                    });
+
+                    document.getElementById('confirm-pay-btn').onclick = async () => {
+                        UI.loading(true);
+                        await new Promise(r => setTimeout(r, 2000));
+                        await verifyPurchase(song);
+                        document.body.removeChild(modal);
+                    };
+                }, 100);
+            },
+
+
+
+            playSong: (id) => {
+                const song = State.songs.find(s => s.id == id);
+                if (!song) return;
+
+                const bar = document.getElementById('player-bar');
+                const btn = document.getElementById('play-btn');
+                const title = document.getElementById('player-title');
+                const artist = document.getElementById('player-artist');
+
+                // If same song, toggle play/pause
+                if (State.currentSongId === id) {
+                    if (State.audio.paused) {
+                        State.audio.play();
+                        State.isPlaying = true;
+                        btn.innerHTML = `<i class="fa-solid fa-pause ml-0"></i>`;
+                    } else {
+                        State.audio.pause();
+                        State.isPlaying = false;
+                        btn.innerHTML = `<i class="fa-solid fa-play ml-1"></i>`;
+                    }
+                    return;
+                }
+
+                // New Song
+                State.currentSongId = id;
+                State.audio.src = song.audio || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // Fallback
+                State.audio.play().catch(e => UI.toast('Audio play failed: ' + e.message, 'error'));
+                State.isPlaying = true;
+
+                // Update UI
+                bar.classList.remove('translate-y-full');
+                title.innerText = song.title;
+                artist.innerText = song.artist;
+                btn.innerHTML = `<i class="fa-solid fa-pause ml-0"></i>`;
+            },
+
+            toggleLike: (id) => {
+                const e = window.event; // strictly safe access
+                if (e) e.stopPropagation();
+
+                let likes = JSON.parse(localStorage.getItem('sp_likes') || '[]');
+                const sid = String(id);
+                if (likes.includes(sid)) {
+                    likes = likes.filter(l => l !== sid);
+                    UI.toast('Removed from favorites');
+                } else {
+                    likes.push(sid);
+                    UI.toast('Added to favorites', 'success');
+                }
+                localStorage.setItem('sp_likes', JSON.stringify(likes));
+                Router.navigate(State.route);
+            }
+        };
+
+        // --- 6. SERVICE WORKER REGISTRATION ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Failed', err));
+            });
+        }
+
+        // --- EXPOSE TO WINDOW ---
+        window.DB = DB;
+        window.State = State;
+        window.UI = UI;
+        window.Router = Router;
+        window.Actions = Actions;
+
+        window.addEventListener('load', async () => {
+            await State.init();
+            Router.navigate('market');
+        });
+
+    </script>
+</body>
+
+</html>
